@@ -1,0 +1,84 @@
+
+    .kgdeGalleryDetailView {
+
+        margin: auto;
+        max-width: 1000px;
+
+        @media #{$bpSmall} {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .kgdeGalleryImages {
+            position: relative;
+            height: 67vw;
+
+            @media #{$bpSmall} {
+                max-height: 500px;
+                height: 42vw;
+                flex-basis: 68%;
+            }
+
+            .kgdeGalleryImage {
+                position: absolute;
+                display: flex;
+                justify-content: center;
+
+                left: 0;
+                top: 0;
+                height: 100%;
+                width: 100%;
+
+                img {
+                    max-height: 100%;
+                    max-width: 100%;
+                    width: auto;
+                    align-self: center;
+                }
+
+                &:first-child {
+                    transform: scale(1);
+                    opacity: 1;
+
+                    animation-name: imageFade;
+                    animation-duration: 0.2s;
+                    animation-timing-function: ease-out;
+                    animation-fill-mode: forwards;
+                    animation-delay: 0.3s;
+                };
+
+                &:last-child {
+                    transform: scale(0.3);
+                    opacity: 0;
+
+                    animation-name: imageAppear;
+                    animation-duration: 0.2s;
+                    animation-timing-function: ease-out;
+                    animation-fill-mode: forwards;
+                    animation-delay: 0.3s;
+                };
+
+            }
+        }
+        .kgdeGalleryDescription {
+            div a {
+                font-size: 12px;
+                font-family: arial;
+                color: #000000;
+            }
+            @media #{$bpSmall} {
+                flex-basis: 28%;
+            }
+        }
+    }
+
+    @keyframes imageAppear {
+        0%   { transform: scale(0.3); opacity: 0; }
+        100% { transform: scale(1); opacity: 1; }
+    }
+
+    @keyframes imageFade {
+        0%   { transform: scale(1); opacity: 1; }
+        100% { transform: scale(0.3); opacity: 0; }
+    }

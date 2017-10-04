@@ -1,0 +1,23 @@
+/* -----------------------------------------------
+        kgdeGallery styles
+----------------------------------------------- */
+/*
+    generate:
+    sass --style compact --line-numbers kgdeGallery.scss kgdeGallery.css
+    sass --style compressed kgdeGallery.scss kgdeGallery.css
+
+    watch
+    sass --style compact --line-numbers --watch kgdeGallery.scss:kgdeGallery.css
+*/
+
+@import "scss/settings";
+@import "scss/mixins";
+@import "scss/layout";
+@import "scss/kgdeGalleryThumbList";
+@import "scss/kgdeGalleryDetailView";
+@import "scss/kgdeGalleryImageViewer";
+
+
+
+
+

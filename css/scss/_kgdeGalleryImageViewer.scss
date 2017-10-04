@@ -1,0 +1,175 @@
+
+
+    .kgdeImageViewerOverlay {
+        display: none;
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: 10000;
+        overflow: hidden;
+        background: #777777;
+
+        * {
+            /*
+            -webkit-user-select: none;
+            -webkit-user-drag: none;
+            */
+            user-select: none;
+            user-drag: none;
+        }
+
+        &.kgdeImageViewerActive {
+            display: block;
+        }
+
+        .kgdeImageViewerWrapper {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            overflow: visible;
+
+            &.kgdeImageViewerAnim {
+                transition: transform 0.2s ease-out;
+            }
+
+            .kgdeImageViewer {
+                width: 100%;
+                height: 100%;
+                position: absolute;
+                top: 0;
+                left: 0;
+
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                img {
+                    max-height: 96%;
+                    max-width: 96%;
+                    width: auto;
+                    height: auto;
+                    object-fit: contain;
+
+                    /*
+                    @media (min-resolution: 192dpi) {
+                        max-width: 1000px;
+                        max-width: 1000px;
+                    }
+                    */
+                }
+
+                &:first-child {
+                    left: -100%;
+                };
+                &:last-child {
+                    left: 100%;
+                };
+            }
+        }
+
+        .kgdeImageViewerClose {
+            @extend %kgdeImageViewerTools;
+
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            z-index: 20000;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            background: #ffffff;
+            color: #777777;
+            font-size: 18px;
+            text-transform: uppercase;
+            font-family: sans-serif;
+            cursor: pointer;
+
+            @media #{$bpSmall} {
+                font-size: 22px;
+                width: 40px;
+                height: 40px;
+            }
+
+            @media #{$bpMedium} {
+                right: 1%;
+            }
+        }
+
+        .kgdeImageViewerGoBack {
+            @extend %kgdeImageViewerArrow;
+            @extend %kgdeImageViewerTools;
+
+            left: 1%;
+            &:after {
+                left: 35%;
+                transform: rotate(-45deg);
+            }
+            transition-delay: 0.1s !important;
+        }
+
+        .kgdeImageViewerGoNext {
+            @extend %kgdeImageViewerArrow;
+            @extend %kgdeImageViewerTools;
+
+            right: 1%;
+            &:after {
+                transform: rotate(135deg);
+                right: 35%;
+            }
+            transition-delay: 0.2s !important;
+        }
+
+        &.kgdeImageViewerShowTools {
+            .kgdeImageViewerGoBack,
+            .kgdeImageViewerGoNext,
+            .kgdeImageViewerClose {
+                transform: scale(1);
+                opacity: 1;
+                &:hover {
+                    transform: scale(1.2);
+                };
+            }
+        }
+    }
+
+    %kgdeImageViewerTools {
+        opacity: 0;
+        transform: scale(0);
+        transition: all 0.4s ease-out;
+    }
+
+    %kgdeImageViewerArrow {
+        position: fixed;
+        top: 50%;
+        width: 4.4%;
+        padding-top: 4.4%;
+        z-index: 100;
+        margin: -1.6% 0 0 0;
+        display: none;
+        cursor: pointer;
+        border-radius: 50%;
+        background: rgba(0, 0, 0, .5);
+
+        @media #{$bpMedium} {
+            display: block;
+        }
+
+        &:after {
+            content: '';
+            position: absolute;
+            top: 25%;
+            width: 50%;
+            height: 50%;
+            border-left: 4px solid #ffffff;
+            border-top: 4px solid #ffffff;
+            @include vendor(box-sizing, border-box);
+        };
+    }
+

@@ -1,0 +1,4 @@
+# gitignore kgdeGallery
+
+node_modules
+.sass-cache

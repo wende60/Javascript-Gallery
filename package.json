@@ -1,0 +1,27 @@
+{
+  "name": "kgdeGallery",
+  "version": "0.1.0",
+  "author": "Joachim Wendenburg <kgde@wendenburg.de>",
+  "main": "index.html",
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.0",
+    "babel-preset-es2015": "^6.24.1",
+    "node-sass": "^3.13.1"
+  },
+  "scripts": {
+    "cssWatch": "sass --style compact --line-numbers --watch ./css/kgdeGallery.scss:./css/kgdeGallery.css",
+    "cssBuild": "sass --style compressed ./css/kgdeGallery.scss ./build/css/kgdeGallery.css",
+    "jsBuild": "babel ./js/** -d ./build",
+    "server": "http-server -p 4000",
+    "serverBuild": "http-server ./build -p 4000",
+    "copyIndex": "cp ./index.html ./build/index.html",
+    "dev": "npm run server & npm run cssWatch",
+    "build": "npm run cssBuild && npm run jsBuild && npm run copyIndex && npm run serverBuild",
+    "kill": "killall node"
+  },
+  "dependencies": {
+    "babel-preset-babili": "^0.1.4",
+    "http-server": "^0.10.0"
+  }
+}

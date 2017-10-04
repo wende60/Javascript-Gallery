@@ -1,0 +1,1 @@
+"use strict";var KGDE=window.KGDE||{};KGDE.utils={c:{smallDeviceMax:500},detectSmallDevice:function detectSmallDevice(){var a=Math.max,b=a(document.documentElement.clientWidth,window.innerWidth||0),c=a(document.documentElement.clientHeight,window.innerHeight||0);return b<this.c.smallDeviceMax||c<this.c.smallDeviceMax}};
