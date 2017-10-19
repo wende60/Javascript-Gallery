@@ -1,75 +1,81 @@
 
-    .kgdeGalleryDetailView {
-
+    .kgdeGalleryWrapper {
         margin: auto;
         max-width: 1000px;
 
-        @media #{$bpSmall} {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .kgdeGalleryImages {
+        position: relative;
+        height: 67vw;
+        flex-basis: 100%;
+        order: 0;
+
+        @media #{$bpMedium} {
+            max-height: 500px;
+            height: 42vw;
+            flex-basis: 68%;
+        }
+
+        .kgdeGalleryImage {
+            position: absolute;
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            justify-content: center;
+
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 100%;
+
+            img {
+                max-height: 100%;
+                max-width: 100%;
+                width: auto;
+                align-self: center;
+            }
+
+            &:first-child {
+                transform: scale(1);
+                opacity: 1;
+
+                animation-name: imageFade;
+                animation-duration: 0.2s;
+                animation-timing-function: ease-out;
+                animation-fill-mode: forwards;
+                animation-delay: 0.3s;
+            };
+
+            &:last-child {
+                transform: scale(0.3);
+                opacity: 0;
+
+                animation-name: imageAppear;
+                animation-duration: 0.2s;
+                animation-timing-function: ease-out;
+                animation-fill-mode: forwards;
+                animation-delay: 0.3s;
+            };
+
+        }
+    }
+
+    .kgdeGalleryDescription {
+        flex-basis: 100%;
+        order: 2;
+
+        @media #{$bpMedium} {
+            flex-basis: 28%;
+            order: 1;
         }
 
-        .kgdeGalleryImages {
-            position: relative;
-            height: 67vw;
-
-            @media #{$bpSmall} {
-                max-height: 500px;
-                height: 42vw;
-                flex-basis: 68%;
-            }
-
-            .kgdeGalleryImage {
-                position: absolute;
-                display: flex;
-                justify-content: center;
-
-                left: 0;
-                top: 0;
-                height: 100%;
-                width: 100%;
-
-                img {
-                    max-height: 100%;
-                    max-width: 100%;
-                    width: auto;
-                    align-self: center;
-                }
-
-                &:first-child {
-                    transform: scale(1);
-                    opacity: 1;
-
-                    animation-name: imageFade;
-                    animation-duration: 0.2s;
-                    animation-timing-function: ease-out;
-                    animation-fill-mode: forwards;
-                    animation-delay: 0.3s;
-                };
-
-                &:last-child {
-                    transform: scale(0.3);
-                    opacity: 0;
-
-                    animation-name: imageAppear;
-                    animation-duration: 0.2s;
-                    animation-timing-function: ease-out;
-                    animation-fill-mode: forwards;
-                    animation-delay: 0.3s;
-                };
-
-            }
-        }
-        .kgdeGalleryDescription {
-            div a {
-                font-size: 12px;
-                font-family: arial;
-                color: #000000;
-            }
-            @media #{$bpSmall} {
-                flex-basis: 28%;
-            }
+        div a {
+            font-size: 12px;
+            font-family: arial;
+            color: #000000;
         }
     }
 
