@@ -28,7 +28,8 @@
             loadViewImageRun: null,
             isSmallDevice: false,
             callbackFunc: null,
-            isTouch: false
+            isTouch: false,
+            loadHeight: 300 // height to detect if image is complete
         },
 
         init(props) {
@@ -448,7 +449,7 @@
 
         loadViewImage(item, cnt) {
             // check if new image is complete
-            const imageHeight = item.loadImage.height > 500;
+            const imageHeight = item.loadImage.height > this.c.loadHeight;
             if (imageHeight || cnt > 20) {
                 clearInterval(this.c.loadViewImageRun);
 
