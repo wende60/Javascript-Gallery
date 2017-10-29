@@ -3,7 +3,7 @@
     .kgdeGalleryThumbListWrapper {
         flex-basis: 100%;
         order: 1;
-        @media #{$bpMedium} {
+        @media #{$bpSmall} {
             order: 2;
         }
 

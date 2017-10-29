@@ -13,23 +13,32 @@ body { overflow-x: hidden; height: 100.1%; font-family: verdana, sans-serif; }
 body, html { height: 100.1%; }
 
 /* line 12, scss/_layout.scss */
-h1 { font-size: 22px; font-weight: 400; padding: 0 0 20px 0; }
+h1 { font-size: 22px; font-weight: 400; padding: 0 0 15px 0; }
+@media (min-width: 499px) { /* line 12, scss/_layout.scss */
+  h1 { padding: 0 0 20px 0; } }
 
-/* line 18, scss/_layout.scss */
-h3 { font-size: 18px; font-weight: 400; padding: 0 0 20px 0; }
+/* line 21, scss/_layout.scss */
+h3 { font-size: 18px; font-weight: 400; padding: 0 0 15px 0; }
+@media (min-width: 499px) { /* line 21, scss/_layout.scss */
+  h3 { padding: 0 0 20px 0; } }
 
-/* line 24, scss/_layout.scss */
-p { padding: 0 0 20px 0; }
+/* line 30, scss/_layout.scss */
+p { padding: 0 0 15px 0; }
+@media (min-width: 499px) { /* line 30, scss/_layout.scss */
+  p { padding: 0 0 20px 0; } }
 
-/* line 28, scss/_layout.scss */
+/* line 37, scss/_layout.scss */
 #main { margin: auto; max-width: 1000px; width: 100%; padding: 20px 30px 20px 30px; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; -ms-box-sizing: border-box; -o-box-sizing: border-box; box-sizing: border-box; }
 
-/* line 36, scss/_layout.scss */
+/* line 45, scss/_layout.scss */
 * { padding: 0; margin: 0; }
+
+/* line 2, scss/_kgdeGalleryMain.scss */
+.kgdeGalleryWrapper { margin: auto; max-width: 1000px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; }
 
 /* line 3, scss/_kgdeGalleryThumbList.scss */
 .kgdeGalleryThumbListWrapper { flex-basis: 100%; order: 1; }
-@media (min-width: 799px) { /* line 3, scss/_kgdeGalleryThumbList.scss */
+@media (min-width: 499px) { /* line 3, scss/_kgdeGalleryThumbList.scss */
   .kgdeGalleryThumbListWrapper { order: 2; } }
 /* line 10, scss/_kgdeGalleryThumbList.scss */
 .kgdeGalleryThumbListWrapper .kgdeGalleryThumbList { width: 100%; overflow: hidden; position: relative; padding: 10px 0 10px 0; }
@@ -75,26 +84,27 @@ p { padding: 0 0 20px 0; }
 .kgdeGalleryThumbListWrapper .kgdeGalleryThumbList .kgdeGalleryGoBack:after, .kgdeGalleryThumbListWrapper .kgdeGalleryThumbList .kgdeGalleryGoNext:after { content: ''; position: absolute; top: 25%; width: 50%; height: 50%; border-left: 2px solid #000000; border-top: 2px solid #000000; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; -ms-box-sizing: border-box; -o-box-sizing: border-box; box-sizing: border-box; }
 
 /* line 2, scss/_kgdeGalleryDetailView.scss */
-.kgdeGalleryWrapper { margin: auto; max-width: 1000px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; }
-
-/* line 12, scss/_kgdeGalleryDetailView.scss */
 .kgdeGalleryImages { position: relative; height: 67vw; flex-basis: 100%; order: 0; }
-@media (min-width: 799px) { /* line 12, scss/_kgdeGalleryDetailView.scss */
+@media (min-width: 499px) { /* line 2, scss/_kgdeGalleryDetailView.scss */
+  .kgdeGalleryImages { max-height: 250px; height: 34vw; flex-basis: 48%; } }
+@media (min-width: 799px) { /* line 2, scss/_kgdeGalleryDetailView.scss */
   .kgdeGalleryImages { max-height: 500px; height: 42vw; flex-basis: 68%; } }
-/* line 24, scss/_kgdeGalleryDetailView.scss */
+/* line 20, scss/_kgdeGalleryDetailView.scss */
 .kgdeGalleryImages .kgdeGalleryImage { position: absolute; display: flex; justify-content: center; left: 0; top: 0; height: 100%; width: 100%; }
-/* line 34, scss/_kgdeGalleryDetailView.scss */
+/* line 30, scss/_kgdeGalleryDetailView.scss */
 .kgdeGalleryImages .kgdeGalleryImage img { max-height: 100%; max-width: 100%; width: auto; align-self: center; }
-/* line 41, scss/_kgdeGalleryDetailView.scss */
+/* line 37, scss/_kgdeGalleryDetailView.scss */
 .kgdeGalleryImages .kgdeGalleryImage:first-child { transform: scale(1); opacity: 1; animation-name: imageFade; animation-duration: 0.2s; animation-timing-function: ease-out; animation-fill-mode: forwards; animation-delay: 0.3s; }
-/* line 52, scss/_kgdeGalleryDetailView.scss */
+/* line 48, scss/_kgdeGalleryDetailView.scss */
 .kgdeGalleryImages .kgdeGalleryImage:last-child { transform: scale(0.3); opacity: 0; animation-name: imageAppear; animation-duration: 0.2s; animation-timing-function: ease-out; animation-fill-mode: forwards; animation-delay: 0.3s; }
 
-/* line 66, scss/_kgdeGalleryDetailView.scss */
-.kgdeGalleryDescription { flex-basis: 100%; order: 2; }
-@media (min-width: 799px) { /* line 66, scss/_kgdeGalleryDetailView.scss */
-  .kgdeGalleryDescription { flex-basis: 28%; order: 1; } }
-/* line 75, scss/_kgdeGalleryDetailView.scss */
+/* line 62, scss/_kgdeGalleryDetailView.scss */
+.kgdeGalleryDescription { flex-basis: 100%; order: 2; font-size: 13px; padding-top: 10px; }
+@media (min-width: 499px) { /* line 62, scss/_kgdeGalleryDetailView.scss */
+  .kgdeGalleryDescription { padding-top: 0; flex-basis: 48%; order: 1; } }
+@media (min-width: 799px) { /* line 62, scss/_kgdeGalleryDetailView.scss */
+  .kgdeGalleryDescription { font-size: inherit; flex-basis: 28%; order: 1; } }
+/* line 80, scss/_kgdeGalleryDetailView.scss */
 .kgdeGalleryDescription div a { font-size: 12px; font-family: arial; color: #000000; }
 
 @keyframes imageAppear { 0% { transform: scale(0.3); opacity: 0; }

@@ -1,19 +1,15 @@
 
-    .kgdeGalleryWrapper {
-        margin: auto;
-        max-width: 1000px;
-
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        flex-wrap: wrap;
-    }
-
     .kgdeGalleryImages {
         position: relative;
         height: 67vw;
         flex-basis: 100%;
         order: 0;
+
+        @media #{$bpSmall} {
+            max-height: 250px;
+            height: 34vw;
+            flex-basis: 48%;
+        }
 
         @media #{$bpMedium} {
             max-height: 500px;
@@ -66,8 +62,17 @@
     .kgdeGalleryDescription {
         flex-basis: 100%;
         order: 2;
+        font-size: 13px;
+        padding-top: 10px;
+
+        @media #{$bpSmall} {
+            padding-top: 0;
+            flex-basis: 48%;
+            order: 1;
+        }
 
         @media #{$bpMedium} {
+            font-size: inherit;
             flex-basis: 28%;
             order: 1;
         }
