@@ -450,7 +450,7 @@
         loadViewImage(item, cnt) {
             // check if new image is complete
             const imageHeight = item.loadImage.height > this.c.loadHeight;
-            if (imageHeight || cnt > 20) {
+            if (imageHeight || cnt > 40) {
                 clearInterval(this.c.loadViewImageRun);
 
                 if (imageHeight) {
