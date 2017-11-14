@@ -20,5 +20,23 @@
                 ht < this.c.smallDeviceMax
             ) ? true : false;
         },
+
+        /**
+         * check if container contains containee
+         * @author  joachim.wendenburg@sixt.com
+         *
+         * @params  {object} container as DOM reference
+         * @param   {object} containee as DOM reference
+         * @return  {boolean}
+         */
+        isInside: function (container, containee) {
+            if (typeof container === "undefined") return false;
+            if (window.Node && Node.prototype && !Node.prototype.contains) {
+                Node.prototype.contains = function (arg) {
+                    return !!(this.compareDocumentPosition(arg) & 16);
+                };
+            }
+            return container.contains(containee);
+        }
     };
 

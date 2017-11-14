@@ -12,6 +12,10 @@
             classVisible: 'kgdeImageViewerActive',
             classToolsVisible: 'kgdeImageViewerShowTools',
             classAnim: 'kgdeImageViewerAnim',
+            classesFormat: {
+                portrait: 'kgdeImageViewerPortrait',
+                landscape: 'kgdeImageViewerLandscape',
+            },
             overlay: null,
             imageWrapper: null,
             buttonBack: null,
@@ -141,6 +145,7 @@
             image.src = this.c.sources[imageIndex];
             imageWrapper.innerHTML = '';
             imageWrapper.appendChild(image);
+            image.addEventListener('load', this, false);
         },
 
         hideImage() {
@@ -151,6 +156,12 @@
             for (let i = 0; i < max; i += 1) {
                 imageWrappers[i].innerHTML = '';
             };
+        },
+
+        checkImage(e) {
+            const image = e.currentTarget;
+            const format = image.height > image.width ? 'portrait' : 'landscape';
+            image.classList.add(this.c.classesFormat[format]);
         },
 
         dragstart(e) {
@@ -392,6 +403,8 @@
                     return this.updateList(e);
                 case 'resize':
                     return this.resizeHandler(e);
+                case 'load':
+                    this.checkImage(e);
             }
         }
     }

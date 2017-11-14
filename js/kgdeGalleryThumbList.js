@@ -17,7 +17,6 @@
             classGoNext: 'kgdeGalleryGoNext',
 
             /* view classes */
-            classView: 'kgdeGalleryDetailView',
             classImages: 'kgdeGalleryImages',
             classImage: 'kgdeGalleryImage',
             classDescription: 'kgdeGalleryDescription',
@@ -29,7 +28,8 @@
             loadViewImageRun: null,
             isSmallDevice: false,
             callbackFunc: null,
-            isTouch: false
+            isTouch: false,
+            loadHeight: 300 // height to detect if image is complete
         },
 
         init(props) {
@@ -44,12 +44,10 @@
                     return;
                 }
 
-                const view = wrapper.getElementsByClassName(this.c.classView)[0] || false;
-
                 wrapper.dataset.galleryIndex = index;
                 thumbList.dataset.listIndex = index;
                 this.addList(wrapper, thumbList, index);
-                this.addView(wrapper, view, index);
+                this.addView(wrapper, index);
                 this.getSizes(index);
                 this.initNavi(index);
 
@@ -86,14 +84,11 @@
             this.prepareLis(lis, index);
         },
 
-        addView(wrapper, view, index) {
-            const images = view ?
-                (view.getElementsByClassName(this.c.classImages)[0] || false) : false;
-            const description = view ?
-                (view.getElementsByClassName(this.c.classDescription)[0] || false) : false;
+        addView(wrapper, index) {
+            const images = wrapper.getElementsByClassName(this.c.classImages)[0] || false;
+            const description = wrapper.getElementsByClassName(this.c.classDescription)[0] || false;
 
             this.c.items[index] = Object.assign(this.c.items[index], {
-                view,
                 images,
                 description
             });
@@ -454,8 +449,8 @@
 
         loadViewImage(item, cnt) {
             // check if new image is complete
-            const imageHeight = item.loadImage.height > 500;
-            if (imageHeight || cnt > 20) {
+            const imageHeight = item.loadImage.height > this.c.loadHeight;
+            if (imageHeight || cnt > 40) {
                 clearInterval(this.c.loadViewImageRun);
 
                 if (imageHeight) {
