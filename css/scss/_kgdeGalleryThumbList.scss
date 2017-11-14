@@ -20,6 +20,10 @@
                 */
                 user-select: none;
                 user-drag: none;
+                touch-action: none;
+
+                -ms-touch-action: none;
+                -ms-user-select: none;
             }
 
             ul {

@@ -129,6 +129,11 @@
             ul.addEventListener('mousemove', this, false);
             ul.addEventListener('mouseup', this, false);
             ul.addEventListener('dragstart', this, false);
+
+            ul.addEventListener('MSPointerDown', this, false);
+            ul.addEventListener('MSPointerMove', this, false);
+            ul.addEventListener('MSPointerUp', this, false);
+
             document.addEventListener('mousemove', this, false);
         },
 
@@ -549,11 +554,14 @@
             switch(e.type) {
                 case 'click':
                     return this.liClick(e);
+                case 'MSPointerDown':
                 case 'touchstart':
                     this.c.isTouch = true;
                     return this.dragstart(e);
+                case 'MSPointerMove':
                 case 'touchmove':
                     return this.drag(e);
+                case 'MSPointerUp':
                 case 'touchend':
                     return this.dragend(e);
                 case 'mousedown':
