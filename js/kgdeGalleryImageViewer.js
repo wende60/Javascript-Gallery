@@ -387,8 +387,6 @@
                 return true;
             }
 
-            console.info(e.type)
-
             // set touch flag to avoid double events on mobile devices
             switch(e.type) {
                 case 'click':

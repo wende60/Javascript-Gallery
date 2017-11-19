@@ -77,11 +77,10 @@ p {
     position: relative;
     padding: 10px 0 10px 0; }
     .kgdeGalleryThumbListWrapper .kgdeGalleryThumbList * {
-      /*
-                -webkit-user-select: none;
-                -webkit-user-drag: none;
-                */
+      -ms-touch-action: none;
+      -ms-user-select: none;
       user-select: none;
+      touch-action: none;
       user-drag: none; }
     .kgdeGalleryThumbListWrapper .kgdeGalleryThumbList ul {
       list-style: none;
@@ -263,11 +262,10 @@ p {
   overflow: hidden;
   background: #222; }
   .kgdeImageViewerOverlay * {
-    /*
-            -webkit-user-select: none;
-            -webkit-user-drag: none;
-            */
+    -ms-touch-action: none;
+    -ms-user-select: none;
     user-select: none;
+    touch-action: none;
     user-drag: none; }
   .kgdeImageViewerOverlay.kgdeImageViewerActive {
     display: block; }
