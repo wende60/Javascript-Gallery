@@ -1,5 +1,7 @@
 
-Javascript gallery... standalone gallery with a thumlist and an image-detail-view, furthermore a full-size image viewer on image-detail-view click. All responsive and as well mouse draggable and swipeable. 
+Javascript gallery... standalone gallery with a thumlist and an image-detail-view, furthermore a full-size image-viewer opening on image-detail-view click. All responsive and as well mouse draggable and swipeable, big devices will also see arrows to navigate.
+
+Find a working example here: http://vogelfisch.de/gallery
 
 *Work in progress, more info comming soon!*
 
