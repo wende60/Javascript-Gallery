@@ -28,7 +28,6 @@
             loadViewImageRun: null,
             isSmallDevice: false,
             callbackFunc: null,
-            isTouch: false,
             loadHeight: 300 // height to detect if image is complete
         },
 
@@ -122,19 +121,24 @@
         },
 
         setUlEvents(ul) {
-            ul.addEventListener('touchstart', this, false);
-            ul.addEventListener('touchmove', this, false);
-            ul.addEventListener('touchend', this, false);
-            ul.addEventListener('mousedown', this, false);
-            ul.addEventListener('mousemove', this, false);
-            ul.addEventListener('mouseup', this, false);
-            ul.addEventListener('dragstart', this, false);
-
-            ul.addEventListener('MSPointerDown', this, false);
-            ul.addEventListener('MSPointerMove', this, false);
-            ul.addEventListener('MSPointerUp', this, false);
-
-            document.addEventListener('mousemove', this, false);
+            switch (KGDE.utils.getDeviceType()) {
+                case 'TOUCH':
+                    ul.addEventListener('touchstart', this, false);
+                    ul.addEventListener('touchmove', this, false);
+                    ul.addEventListener('touchend', this, false);
+                    break;
+                case 'POINTER':
+                    ul.addEventListener('pointerdown', this, false);
+                    ul.addEventListener('pointermove', this, false);
+                    ul.addEventListener('pointerup', this, false);
+                    ul.addEventListener('pointerleave', this, false);
+                default:
+                    ul.addEventListener('mousedown', this, false);
+                    ul.addEventListener('mousemove', this, false);
+                    ul.addEventListener('mouseup', this, false);
+                    ul.addEventListener('dragstart', this, false);
+                    document.addEventListener('mousemove', this, false);
+            }
         },
 
         prepareUlSlideData(index) {
@@ -275,12 +279,6 @@
         },
 
         dragend(e) {
-            // remove double event blocking
-            if (e.type === 'mouseup' && this.c.isTouch) {
-                this.c.isTouch = false;
-                return true;
-            }
-
             // nothing to do
             if(!this.c.currItem) {
                 return true;
@@ -554,20 +552,20 @@
             switch(e.type) {
                 case 'click':
                     return this.liClick(e);
-                case 'MSPointerDown':
+                case 'pointerdown':
                 case 'touchstart':
-                    this.c.isTouch = true;
                     return this.dragstart(e);
-                case 'MSPointerMove':
+                case 'pointermove':
                 case 'touchmove':
                     return this.drag(e);
-                case 'MSPointerUp':
+                case 'pointerup':
+                case 'pointerleave':
                 case 'touchend':
                     return this.dragend(e);
                 case 'mousedown':
-                    return this.c.isTouch ? true : this.dragstart(e);
+                    return this.dragstart(e);
                 case 'mousemove':
-                    return this.c.isTouch ? true : this.drag(e);
+                    return this.drag(e);
                 case 'mouseup':
                     return this.dragend(e);
                 case 'dragstart':
