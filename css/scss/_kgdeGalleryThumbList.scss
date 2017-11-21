@@ -14,11 +14,10 @@
             padding: 10px 0 10px 0;
 
             * {
-                /*
-                -webkit-user-select: none;
-                -webkit-user-drag: none;
-                */
+                -ms-touch-action: none;
+                -ms-user-select: none;
                 user-select: none;
+                touch-action: none;
                 user-drag: none;
             }
 

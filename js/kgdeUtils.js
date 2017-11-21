@@ -37,6 +37,11 @@
                 };
             }
             return container.contains(containee);
+        },
+
+        getDeviceType: function() {
+            return 'ontouchstart' in window ?
+                'TOUCH' : (window.PointerEvent ? 'POINTER' : 'DEFAULT');
         }
     };
 

@@ -10,8 +10,8 @@
     "node-sass": "^3.13.1"
   },
   "scripts": {
-    "cssWatch": "sass --style compact --line-numbers --watch ./css/kgdeGallery.scss:./css/kgdeGallery.css",
-    "cssBuild": "sass --style compressed ./css/kgdeGallery.scss ./build/css/kgdeGallery.css",
+    "cssWatch": "node-sass --style compact --line-numbers --watch ./css/kgdeGallery.scss -o ./css/",
+    "cssBuild": "node-sass --style compressed ./css/kgdeGallery.scss ./build/css/kgdeGallery.css",
     "jsBuild": "babel ./js/** -d ./build",
     "server": "http-server -p 4000",
     "serverBuild": "http-server ./build -p 4000",
