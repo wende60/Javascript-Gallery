@@ -264,6 +264,7 @@ p {
   .kgdeImageViewerOverlay * {
     -ms-touch-action: none;
     -ms-user-select: none;
+    -ms-user-drag: none;
     user-select: none;
     touch-action: none;
     user-drag: none; }

@@ -95,10 +95,10 @@
                     this.list.addEventListener('mousedown', this, false);
                     this.list.addEventListener('mousemove', this, false);
                     this.list.addEventListener('mouseup', this, false);
-                    this.list.addEventListener('dragstart', this, false);
                     document.addEventListener('mousemove', this, false);
             }
 
+            this.list.addEventListener('dragstart', this, false);
             this.list.addEventListener('transitionend', this, false);
             this.buttonClose.addEventListener('click', this, false);
             this.buttonBack.addEventListener('click', this, false);
@@ -282,7 +282,7 @@
             }
 
             const imageWrappers = this.list.getElementsByClassName(this.c.classImage);
-            imageWrappers[this.c.currentPosition].remove();
+            this.list.removeChild(imageWrappers[this.c.currentPosition]);
 
             const indexShift = this.c.currentPosition === 2 ? -1 : 1;
             this.c.index = this.getImageIndex(indexShift);
@@ -415,6 +415,9 @@
                     return this.resizeHandler(e);
                 case 'load':
                     this.checkImage(e);
+                case 'dragstart':
+                    e.preventDefault();
+                    return false;
             }
         }
     }

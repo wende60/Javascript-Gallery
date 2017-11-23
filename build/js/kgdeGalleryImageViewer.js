@@ -1,1 +1,404 @@
-'use strict';var KGDE=window.KGDE||{};KGDE.imageViewer={c:{classOverlay:'kgdeImageViewerOverlay',classList:'kgdeImageViewerWrapper',classImage:'kgdeImageViewer',classButtonBack:'kgdeImageViewerGoBack',classButtonNext:'kgdeImageViewerGoNext',classButtonClose:'kgdeImageViewerClose',classVisible:'kgdeImageViewerActive',classToolsVisible:'kgdeImageViewerShowTools',classAnim:'kgdeImageViewerAnim',classesFormat:{portrait:'kgdeImageViewerPortrait',landscape:'kgdeImageViewerLandscape'},overlay:null,imageWrapper:null,buttonBack:null,buttonNext:null,itemWidth:0,itemPositions:[],currentPosition:1,transitionRun:null,resizeRun:null,sources:[],index:0,isInitialized:!1,isToolsVisible:!1,slide:{moveLeft:0,initialLeft:0,startX:0,startY:0,distX:0,distY:0,currX:0,currY:0,startTime:0,dragging:!1,animate:!1}},init:function init(){this.overlay=document.createElement('div'),this.overlay.classList.add(this.c.classOverlay),this.list=document.createElement('div'),this.list.classList.add(this.c.classList);for(var b,c=0;3>c;c+=1)b=document.createElement('div'),b.classList.add(this.c.classImage),this.list.appendChild(b);var a=document.createTextNode('x');this.buttonClose=document.createElement('div'),this.buttonClose.classList.add(this.c.classButtonClose),this.buttonClose.appendChild(a),this.buttonBack=document.createElement('div'),this.buttonBack.classList.add(this.c.classButtonBack),this.buttonNext=document.createElement('div'),this.buttonNext.classList.add(this.c.classButtonNext),this.overlay.appendChild(this.list),this.overlay.appendChild(this.buttonClose),this.overlay.appendChild(this.buttonBack),this.overlay.appendChild(this.buttonNext),document.body.appendChild(this.overlay),this.addEvents()},addEvents:function addEvents(){switch(KGDE.utils.getDeviceType()){case'TOUCH':this.list.addEventListener('touchstart',this,!1),this.list.addEventListener('touchmove',this,!1),this.list.addEventListener('touchend',this,!1);break;case'POINTER':this.list.addEventListener('pointerdown',this,!1),this.list.addEventListener('pointermove',this,!1),this.list.addEventListener('pointerup',this,!1),this.list.addEventListener('pointerleave',this,!1);break;default:this.list.addEventListener('mousedown',this,!1),this.list.addEventListener('mousemove',this,!1),this.list.addEventListener('mouseup',this,!1),this.list.addEventListener('dragstart',this,!1),document.addEventListener('mousemove',this,!1);}this.list.addEventListener('transitionend',this,!1),this.buttonClose.addEventListener('click',this,!1),this.buttonBack.addEventListener('click',this,!1),this.buttonNext.addEventListener('click',this,!1),window.addEventListener('resize',this,!1)},setSizes:function setSizes(){this.c.itemWidth=this.list.offsetWidth,this.c.itemPositions=[-1*this.c.itemWidth,0,this.c.itemWidth]},openViewer:function openViewer(a){this.c.isInitialized||(this.init(),this.c.isInitialized=!0),this.c.sources=a.list,this.c.index=parseInt(a.index),this.c.sync=a.sync,this.showImage(),this.overlay.classList.add(this.c.classVisible),this.setSizes()},showImage:function showImage(){var a=this;this.addImageToWrapper(1,this.c.index),setTimeout(function(){a.loadNextImage()},1e3)},loadNextImage:function loadNextImage(){for(var c=-1;2>c;c+=1)if(0!=c){var a=c+1,b=this.getImageIndex(c);this.addImageToWrapper(a,b)}},addImageToWrapper:function addImageToWrapper(a,b){var c=this.list.getElementsByClassName(this.c.classImage)[a],d=document.createElement('img');d.src=this.c.sources[b],c.innerHTML='',c.appendChild(d),d.addEventListener('load',this,!1)},hideImage:function hideImage(){this.overlay.classList.remove(this.c.classVisible);for(var a=this.list.getElementsByClassName(this.c.classImage),b=a.length,c=0;c<b;c+=1)a[c].innerHTML=''},checkImage:function checkImage(a){var b=a.currentTarget,c=b.height>b.width?'portrait':'landscape';b.classList.add(this.c.classesFormat[c])},dragstart:function dragstart(a){if(this.c.slide.animate)return!0;var b=a.touches?a.touches[0]:!!a.changedTouches&&a.changedTouches[0];return this.c.slide.startX=b?b.pageX:a.clientX,this.c.slide.startY=b?b.pageY:a.clientY,this.c.slide.startTime=new Date().getTime(),this.c.slide.initalLeft=this.c.slide.moveLeft,this.c.slide.dragging=!0,!1},drag:function drag(a){if(!this.c.slide.dragging)return!0;if(a.currentTarget!==this.list)return this.dragend(a),!0;var b=a.touches?a.touches[0]:!!a.changedTouches&&a.changedTouches[0];return this.c.slide.currX=b?b.pageX:a.clientX,this.c.slide.currY=b?b.pageY:a.clientY,this.c.slide.distX=this.c.slide.currX-this.c.slide.startX,this.c.slide.distY=this.c.slide.currY-this.c.slide.startY,a.preventDefault(),a.stopPropagation(),this.c.slide.moveLeft=this.c.slide.distX+this.c.slide.initalLeft,this.list.style.transform='translate('+this.c.slide.moveLeft+'px, 0)',!1},dragend:function dragend(){var a=Math.abs;if(!this.c.slide.dragging)return!0;var b=new Date().getTime()-this.c.slide.startTime;if(300>b&&5>a(this.c.slide.distX)&&5>a(this.c.slide.distY))return this.toggleToolDisplay(),this.reset(),!0;var c=0>this.c.slide.distX?-1:1,d=a(this.c.slide.distX)>this.c.itemWidth/5;if(d){var e=this.c.currentPosition+c;this.c.currentPosition=-1<e&&e<this.c.itemPositions.length?e:this.c.currentPosition}return this.animDragend(),this.reset(),!0},animDragend:function animDragend(){var a=this;this.c.slide.animate=!0,this.c.slide.moveLeft=this.c.itemPositions[this.c.currentPosition],this.list.classList.add(this.c.classAnim),this.list.style.transform='translate('+this.c.slide.moveLeft+'px, 0)',this.c.transitionRun=setTimeout(function(){a.c.slide.animate&&a.updateList()},500)},updateList:function updateList(){if(this.list.classList.contains(this.c.classAnim)&&this.list.classList.remove(this.c.classAnim),1===this.c.currentPosition)return this.c.slide.animate=!1,!0;var a=this.list.getElementsByClassName(this.c.classImage);a[this.c.currentPosition].remove();var b=2===this.c.currentPosition?-1:1;this.c.index=this.getImageIndex(b);var c=this.getImageIndex(b),d=document.createElement('img');d.src=this.c.sources[c];var e=document.createElement('div');return e.classList.add(this.c.classImage),e.appendChild(d),2===this.c.currentPosition?this.list.insertBefore(e,a[0]):this.list.appendChild(e),this.c.currentPosition=1,this.c.slide.moveLeft=0,this.list.style.transform='translate('+this.c.slide.moveLeft+'px, 0)',this.c.slide.animate=!1,!0},getImageIndex:function getImageIndex(a){var b=0>this.c.index+a?this.c.sources.length-1:this.c.index+a>=this.c.sources.length?0:this.c.index+a;return b},handleClose:function handleClose(){this.c.sync(this.c.index),this.hideImage()},goBack:function goBack(){this.c.currentPosition=0,this.animDragend()},goNext:function goNext(){this.c.currentPosition=2,this.animDragend()},toggleToolDisplay:function toggleToolDisplay(){this.c.isToolsVisible=!this.c.isToolsVisible,this.c.isToolsVisible?this.overlay.classList.add(this.c.classToolsVisible):this.overlay.classList.contains(this.c.classToolsVisible)&&this.overlay.classList.remove(this.c.classToolsVisible)},reset:function reset(){this.c.slide.dragging=!1,this.c.slide.startX=!1,this.c.slide.startY=!1,this.c.slide.currX=0,this.c.slide.currY=0,this.c.slide.distX=0,this.c.slide.distY=0},avoidGhostDragging:function avoidGhostDragging(a){return a.preventDefault(),!1},clickHandler:function clickHandler(a){switch(a.stopPropagation(),a.preventDefault(),a.currentTarget){case this.buttonBack:this.goBack();break;case this.buttonNext:this.goNext();break;case this.buttonClose:this.handleClose();}return!0},resizeHandler:function resizeHandler(){var a=this;clearTimeout(this.c.resizeRun),this.c.resizeRun=setTimeout(function(){a.setSizes()},200)},handleEvent:function handleEvent(a){if(0<a.button||a.ctrlKey)return!0;switch(a.type){case'click':return this.clickHandler(a);case'pointerdown':case'touchstart':return this.dragstart(a);case'pointermove':case'touchmove':return this.drag(a);case'pointerup':case'pointerleave':case'touchend':return this.dragend(a);case'mousedown':return this.dragstart(a);case'mousemove':return this.drag(a);case'mouseup':return this.dragend(a);case'dragstart':return this.avoidGhostDragging(a);case'transitionend':return this.updateList(a);case'resize':return this.resizeHandler(a);case'load':this.checkImage(a);}}};
+'use strict';
+
+var KGDE = window.KGDE || {};
+
+KGDE.imageViewer = {
+    c: {
+        classOverlay: 'kgdeImageViewerOverlay',
+        classList: 'kgdeImageViewerWrapper',
+        classImage: 'kgdeImageViewer',
+        classButtonBack: 'kgdeImageViewerGoBack',
+        classButtonNext: 'kgdeImageViewerGoNext',
+        classButtonClose: 'kgdeImageViewerClose',
+        classVisible: 'kgdeImageViewerActive',
+        classToolsVisible: 'kgdeImageViewerShowTools',
+        classAnim: 'kgdeImageViewerAnim',
+        classesFormat: {
+            portrait: 'kgdeImageViewerPortrait',
+            landscape: 'kgdeImageViewerLandscape'
+        },
+        overlay: null,
+        imageWrapper: null,
+        buttonBack: null,
+        buttonNext: null,
+        itemWidth: 0,
+        itemPositions: [],
+        currentPosition: 1,
+        transitionRun: null,
+        resizeRun: null,
+        sources: [],
+        index: 0,
+        isInitialized: false,
+        isToolsVisible: false,
+        slide: {
+            moveLeft: 0,
+            initialLeft: 0,
+            startX: 0,
+            startY: 0,
+            distX: 0,
+            distY: 0,
+            currX: 0,
+            currY: 0,
+            startTime: 0,
+            dragging: false,
+            animate: false
+        }
+    },
+
+    init: function init() {
+        this.overlay = document.createElement('div');
+        this.overlay.classList.add(this.c.classOverlay);
+
+        this.list = document.createElement('div');
+        this.list.classList.add(this.c.classList);
+
+        for (var i = 0; i < 3; i += 1) {
+            var imageWrapper = document.createElement('div');
+            imageWrapper.classList.add(this.c.classImage);
+            this.list.appendChild(imageWrapper);
+        }
+
+        var closeString = document.createTextNode('x');
+        this.buttonClose = document.createElement('div');
+        this.buttonClose.classList.add(this.c.classButtonClose);
+        this.buttonClose.appendChild(closeString);
+
+        this.buttonBack = document.createElement('div');
+        this.buttonBack.classList.add(this.c.classButtonBack);
+
+        this.buttonNext = document.createElement('div');
+        this.buttonNext.classList.add(this.c.classButtonNext);
+
+        this.overlay.appendChild(this.list);
+        this.overlay.appendChild(this.buttonClose);
+        this.overlay.appendChild(this.buttonBack);
+        this.overlay.appendChild(this.buttonNext);
+
+        document.body.appendChild(this.overlay);
+
+        this.addEvents();
+    },
+    addEvents: function addEvents() {
+        switch (KGDE.utils.getDeviceType()) {
+            case 'TOUCH':
+                this.list.addEventListener('touchstart', this, false);
+                this.list.addEventListener('touchmove', this, false);
+                this.list.addEventListener('touchend', this, false);
+                break;
+            case 'POINTER':
+                this.list.addEventListener('pointerdown', this, false);
+                this.list.addEventListener('pointermove', this, false);
+                this.list.addEventListener('pointerup', this, false);
+                this.list.addEventListener('pointerleave', this, false);
+                break;
+            default:
+                this.list.addEventListener('mousedown', this, false);
+                this.list.addEventListener('mousemove', this, false);
+                this.list.addEventListener('mouseup', this, false);
+                document.addEventListener('mousemove', this, false);
+        }
+
+        this.list.addEventListener('dragstart', this, false);
+        this.list.addEventListener('transitionend', this, false);
+        this.buttonClose.addEventListener('click', this, false);
+        this.buttonBack.addEventListener('click', this, false);
+        this.buttonNext.addEventListener('click', this, false);
+        window.addEventListener('resize', this, false);
+    },
+    setSizes: function setSizes() {
+        this.c.itemWidth = this.list.offsetWidth;
+        this.c.itemPositions = [this.c.itemWidth * -1, 0, this.c.itemWidth];
+    },
+    openViewer: function openViewer(props) {
+        if (!this.c.isInitialized) {
+            this.init();
+            this.c.isInitialized = true;
+        }
+
+        this.c.sources = props.list;
+        this.c.index = parseInt(props.index);
+        this.c.sync = props.sync;
+
+        this.showImage();
+        this.overlay.classList.add(this.c.classVisible);
+
+        // sizes available only if display not none
+        this.setSizes();
+    },
+    showImage: function showImage() {
+        var _this = this;
+
+        this.addImageToWrapper(1, this.c.index);
+
+        // load next images with delay
+        setTimeout(function () {
+            _this.loadNextImage();
+        }, 1000);
+    },
+    loadNextImage: function loadNextImage() {
+        for (var i = -1; i < 2; i += 1) {
+            if (i === 0) {
+                continue;
+            }
+            var wrapperIndex = i + 1;
+            var imageIndex = this.getImageIndex(i);
+            this.addImageToWrapper(wrapperIndex, imageIndex);
+        }
+    },
+    addImageToWrapper: function addImageToWrapper(wrapperIndex, imageIndex) {
+        var imageWrapper = this.list.getElementsByClassName(this.c.classImage)[wrapperIndex];
+        var image = document.createElement('img');
+        image.src = this.c.sources[imageIndex];
+        imageWrapper.innerHTML = '';
+        imageWrapper.appendChild(image);
+        image.addEventListener('load', this, false);
+    },
+    hideImage: function hideImage() {
+        this.overlay.classList.remove(this.c.classVisible);
+
+        var imageWrappers = this.list.getElementsByClassName(this.c.classImage);
+        var max = imageWrappers.length;
+        for (var i = 0; i < max; i += 1) {
+            imageWrappers[i].innerHTML = '';
+        };
+    },
+    checkImage: function checkImage(e) {
+        var image = e.currentTarget;
+        var format = image.height > image.width ? 'portrait' : 'landscape';
+        image.classList.add(this.c.classesFormat[format]);
+    },
+    dragstart: function dragstart(e) {
+        if (this.c.slide.animate) {
+            return true;
+        }
+
+        var touch = e.touches ? e.touches[0] : e.changedTouches ? e.changedTouches[0] : false;
+
+        // get touch x if available or mouse x
+        this.c.slide.startX = touch ? touch.pageX : e.clientX;
+        this.c.slide.startY = touch ? touch.pageY : e.clientY;
+        this.c.slide.startTime = new Date().getTime();
+
+        this.c.slide.initalLeft = this.c.slide.moveLeft;
+        this.c.slide.dragging = true;
+
+        return false;
+    },
+    drag: function drag(e) {
+        if (!this.c.slide.dragging) {
+            return true;
+        }
+
+        if (e.currentTarget !== this.list) {
+            this.dragend(e);
+            return true;
+        }
+
+        var touch = e.touches ? e.touches[0] : e.changedTouches ? e.changedTouches[0] : false;
+
+        // get touch x/y if available or mouse x/y
+        this.c.slide.currX = touch ? touch.pageX : e.clientX;
+        this.c.slide.currY = touch ? touch.pageY : e.clientY;
+
+        // calculate x/y distance since start
+        this.c.slide.distX = this.c.slide.currX - this.c.slide.startX;
+        this.c.slide.distY = this.c.slide.currY - this.c.slide.startY;
+
+        /*
+        // vertical move detected... do nothing
+        if(Math.abs(this.c.slide.distY) > Math.abs(this.c.slide.distX)) {
+            return true;
+        }
+        */
+
+        // horizontal move detected, continue with sliding
+        e.preventDefault();
+        e.stopPropagation();
+
+        this.c.slide.moveLeft = this.c.slide.distX + this.c.slide.initalLeft;
+        this.list.style.transform = 'translate(' + this.c.slide.moveLeft + 'px, 0)';
+        return false;
+    },
+    dragend: function dragend(e) {
+        if (!this.c.slide.dragging) {
+            return true;
+        }
+        // get duration between down and up
+        var duration = new Date().getTime() - this.c.slide.startTime;
+
+        // detect click by short duration and missing move
+        if (duration < 300 && Math.abs(this.c.slide.distX) < 5 && Math.abs(this.c.slide.distY) < 5) {
+            // console.info(duration, this.c.slide.distX, this.c.slide.distY)
+            this.toggleToolDisplay();
+            this.reset();
+            return true;
+        }
+
+        var direction = this.c.slide.distX < 0 ? -1 : 1;
+        var isMove = Math.abs(this.c.slide.distX) > this.c.itemWidth / 5;
+
+        if (isMove) {
+            var newPosition = this.c.currentPosition + direction;
+            this.c.currentPosition = newPosition > -1 && newPosition < this.c.itemPositions.length ? newPosition : this.c.currentPosition;
+        }
+
+        this.animDragend();
+        this.reset();
+        return true;
+    },
+    animDragend: function animDragend() {
+        var _this2 = this;
+
+        this.c.slide.animate = true;
+        this.c.slide.moveLeft = this.c.itemPositions[this.c.currentPosition];
+        this.list.classList.add(this.c.classAnim);
+        this.list.style.transform = 'translate(' + this.c.slide.moveLeft + 'px, 0)';
+
+        this.c.transitionRun = setTimeout(function () {
+            if (_this2.c.slide.animate) {
+                _this2.updateList();
+            }
+        }, 500);
+    },
+    updateList: function updateList() {
+        if (this.list.classList.contains(this.c.classAnim)) {
+            this.list.classList.remove(this.c.classAnim);
+        }
+
+        if (this.c.currentPosition === 1) {
+            this.c.slide.animate = false;
+            return true;
+        }
+
+        var imageWrappers = this.list.getElementsByClassName(this.c.classImage);
+        this.list.removeChild(imageWrappers[this.c.currentPosition]);
+
+        var indexShift = this.c.currentPosition === 2 ? -1 : 1;
+        this.c.index = this.getImageIndex(indexShift);
+        var addIndex = this.getImageIndex(indexShift);
+
+        var image = document.createElement('img');
+        image.src = this.c.sources[addIndex];
+
+        var newWrapper = document.createElement('div');
+        newWrapper.classList.add(this.c.classImage);
+        newWrapper.appendChild(image);
+
+        if (this.c.currentPosition === 2) {
+            this.list.insertBefore(newWrapper, imageWrappers[0]);
+        } else {
+            this.list.appendChild(newWrapper);
+        }
+
+        this.c.currentPosition = 1;
+        this.c.slide.moveLeft = 0;
+        this.list.style.transform = 'translate(' + this.c.slide.moveLeft + 'px, 0)';
+        this.c.slide.animate = false;
+
+        return true;
+    },
+    getImageIndex: function getImageIndex(indexShift) {
+        var newIndex = this.c.index + indexShift < 0 ? this.c.sources.length - 1 : this.c.index + indexShift >= this.c.sources.length ? 0 : this.c.index + indexShift;
+        return newIndex;
+    },
+    handleClose: function handleClose() {
+        this.c.sync(this.c.index);
+        this.hideImage();
+    },
+    goBack: function goBack(index) {
+        this.c.currentPosition = 0;
+        this.animDragend();
+    },
+    goNext: function goNext(index) {
+        this.c.currentPosition = 2;
+        this.animDragend();
+    },
+    toggleToolDisplay: function toggleToolDisplay() {
+        this.c.isToolsVisible = !this.c.isToolsVisible;
+        if (this.c.isToolsVisible) {
+            this.overlay.classList.add(this.c.classToolsVisible);
+        } else if (this.overlay.classList.contains(this.c.classToolsVisible)) {
+            this.overlay.classList.remove(this.c.classToolsVisible);
+        }
+    },
+    reset: function reset() {
+        this.c.slide.dragging = false;
+        this.c.slide.startX = false;
+        this.c.slide.startY = false;
+        this.c.slide.currX = 0;
+        this.c.slide.currY = 0;
+        this.c.slide.distX = 0;
+        this.c.slide.distY = 0;
+    },
+    avoidGhostDragging: function avoidGhostDragging(e) {
+        e.preventDefault();
+        return false;
+    },
+    clickHandler: function clickHandler(e) {
+        e.stopPropagation();
+        e.preventDefault();
+
+        switch (e.currentTarget) {
+            case this.buttonBack:
+                this.goBack();
+                break;
+            case this.buttonNext:
+                this.goNext();
+                break;
+            case this.buttonClose:
+                this.handleClose();
+                break;
+        }
+        return true;
+    },
+
+
+    resizeHandler: function resizeHandler() {
+        var _this3 = this;
+
+        clearTimeout(this.c.resizeRun);
+        this.c.resizeRun = setTimeout(function () {
+            _this3.setSizes();
+        }, 200);
+    },
+
+    handleEvent: function handleEvent(e) {
+        // we do not need a rightclick
+        if (e.button > 0 || e.ctrlKey) {
+            return true;
+        }
+
+        // set touch flag to avoid double events on mobile devices
+        switch (e.type) {
+            case 'click':
+                return this.clickHandler(e);
+            case 'pointerdown':
+            case 'touchstart':
+                return this.dragstart(e);
+            case 'pointermove':
+            case 'touchmove':
+                return this.drag(e);
+            case 'pointerup':
+            case 'pointerleave':
+            case 'touchend':
+                return this.dragend(e);
+            case 'mousedown':
+                return this.dragstart(e);
+            case 'mousemove':
+                return this.drag(e);
+            case 'mouseup':
+                return this.dragend(e);
+            case 'dragstart':
+                return this.avoidGhostDragging(e);
+            case 'transitionend':
+                return this.updateList(e);
+            case 'resize':
+                return this.resizeHandler(e);
+            case 'load':
+                this.checkImage(e);
+            case 'dragstart':
+                e.preventDefault();
+                return false;
+        }
+    }
+};

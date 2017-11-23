@@ -86,11 +86,8 @@
         addView(wrapper, index) {
             const images = wrapper.getElementsByClassName(this.c.classImages)[0] || false;
             const description = wrapper.getElementsByClassName(this.c.classDescription)[0] || false;
-
-            this.c.items[index] = Object.assign(this.c.items[index], {
-                images,
-                description
-            });
+            this.c.items[index]['images'] = images;
+            this.c.items[index]['description'] = description;
         },
 
         getSizes(index) {
@@ -103,15 +100,12 @@
             const itemsVisible = Math.round(thumbListWidth / liWidth);
             const liAvailablePositions = liPositions.slice(0, liPositions.length + 1 - itemsVisible);
 
-            this.c.items[index] = Object.assign(this.c.items[index], {
-                thumbListWidth,
-                ulWidth,
-                liWidth,
-                itemsVisible,
-                liPositions,
-                liAvailablePositions
-            });
-
+            this.c.items[index]['thumbListWidth'] = thumbListWidth;
+            this.c.items[index]['ulWidth'] = ulWidth;
+            this.c.items[index]['liWidth'] = liWidth;
+            this.c.items[index]['itemsVisible'] = itemsVisible;
+            this.c.items[index]['liPositions'] = liPositions;
+            this.c.items[index]['liAvailablePositions'] = liAvailablePositions;
         },
 
         prepareUl(ul, index) {
@@ -410,9 +404,14 @@
 
         getCurrentOffsetIndex(item) {
             const moveLeft = item.slide.moveLeft;
-            return item.liAvailablePositions.findIndex(position => {
-                return position === Math.abs(moveLeft);
+            let foundIndex = 0;
+            item.liAvailablePositions.forEach((position, index) => {
+                if (position === Math.abs(moveLeft)) {
+                    foundIndex = index;
+                    return;
+                }
             });
+            return foundIndex;
         },
 
         avoidGhostDragging(e) {

@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="de">
 <head>
 
@@ -245,13 +246,13 @@
     <script type="text/javascript" src="./js/kgdeGalleryImageViewer.js"></script>
 
     <script type="text/javascript">
-        document.addEventListener("DOMContentLoaded", () => {
-            const callbackFunc = props => {
+        document.addEventListener("DOMContentLoaded", function() {
+            var callbackFunc = function(props) {
                 if (KGDE.imageViewer) {
                     KGDE.imageViewer.openViewer(props);
                 }
             }
-            KGDE.thumbListGallery.init({ callbackFunc });
+            KGDE.thumbListGallery.init({ callbackFunc:callbackFunc });
         });
     </script>
 </body>
