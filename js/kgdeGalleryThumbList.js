@@ -472,7 +472,7 @@
             const index = item.currentImageIndex;
             const curentImages = item.images.getElementsByClassName(this.c.classImage);
             if (curentImages.length > 1) {
-                curentImages[0].remove();
+                item.images.removeChild(curentImages[0]);
             }
 
             const imageWrapper = document.createElement('div');
