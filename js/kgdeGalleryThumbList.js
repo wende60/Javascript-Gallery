@@ -130,9 +130,9 @@
                     ul.addEventListener('mousedown', this, false);
                     ul.addEventListener('mousemove', this, false);
                     ul.addEventListener('mouseup', this, false);
+                    ul.addEventListener('dragstart', this, false);
                     document.addEventListener('mousemove', this, false);
             }
-            ul.addEventListener('dragstart', this, false);
         },
 
         prepareUlSlideData(index) {
