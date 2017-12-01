@@ -95,10 +95,10 @@
                     this.list.addEventListener('mousedown', this, false);
                     this.list.addEventListener('mousemove', this, false);
                     this.list.addEventListener('mouseup', this, false);
+                    this.list.addEventListener('dragstart', this, false);
                     document.addEventListener('mousemove', this, false);
             }
 
-            this.list.addEventListener('dragstart', this, false);
             this.list.addEventListener('transitionend', this, false);
             this.buttonClose.addEventListener('click', this, false);
             this.buttonBack.addEventListener('click', this, false);
