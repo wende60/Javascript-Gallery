@@ -12,6 +12,10 @@
             classVisible: 'kgdeImageViewerActive',
             classToolsVisible: 'kgdeImageViewerShowTools',
             classAnim: 'kgdeImageViewerAnim',
+            classesFormat: {
+                portrait: 'kgdeImageViewerPortrait',
+                landscape: 'kgdeImageViewerLandscape',
+            },
             overlay: null,
             imageWrapper: null,
             buttonBack: null,
@@ -25,7 +29,6 @@
             index: 0,
             isInitialized: false,
             isToolsVisible: false,
-            isTouch: false,
             slide: {
                 moveLeft: 0,
                 initialLeft: 0,
@@ -76,20 +79,30 @@
         },
 
         addEvents() {
-            this.list.addEventListener('touchstart', this, false);
-            this.list.addEventListener('touchmove', this, false);
-            this.list.addEventListener('touchend', this, false);
-            this.list.addEventListener('mousedown', this, false);
-            this.list.addEventListener('mousemove', this, false);
-            this.list.addEventListener('mouseup', this, false);
+            switch (KGDE.utils.getDeviceType()) {
+                case 'TOUCH':
+                    this.list.addEventListener('touchstart', this, false);
+                    this.list.addEventListener('touchmove', this, false);
+                    this.list.addEventListener('touchend', this, false);
+                    break;
+                case 'POINTER':
+                    this.list.addEventListener('pointerdown', this, false);
+                    this.list.addEventListener('pointermove', this, false);
+                    this.list.addEventListener('pointerup', this, false);
+                    this.list.addEventListener('pointerleave', this, false);
+                    break;
+                default:
+                    this.list.addEventListener('mousedown', this, false);
+                    this.list.addEventListener('mousemove', this, false);
+                    this.list.addEventListener('mouseup', this, false);
+                    document.addEventListener('mousemove', this, false);
+            }
+
             this.list.addEventListener('dragstart', this, false);
             this.list.addEventListener('transitionend', this, false);
-
             this.buttonClose.addEventListener('click', this, false);
             this.buttonBack.addEventListener('click', this, false);
             this.buttonNext.addEventListener('click', this, false);
-
-            document.addEventListener('mousemove', this, false);
             window.addEventListener('resize', this, false);
         },
 
@@ -141,6 +154,7 @@
             image.src = this.c.sources[imageIndex];
             imageWrapper.innerHTML = '';
             imageWrapper.appendChild(image);
+            image.addEventListener('load', this, false);
         },
 
         hideImage() {
@@ -151,6 +165,12 @@
             for (let i = 0; i < max; i += 1) {
                 imageWrappers[i].innerHTML = '';
             };
+        },
+
+        checkImage(e) {
+            const image = e.currentTarget;
+            const format = image.height > image.width ? 'portrait' : 'landscape';
+            image.classList.add(this.c.classesFormat[format]);
         },
 
         dragstart(e) {
@@ -210,17 +230,15 @@
         },
 
         dragend(e) {
-            // remove double event blocking
-            if (e.type === 'mouseup' && this.c.isTouch) {
-                this.c.isTouch = false;
+            if (!this.c.slide.dragging) {
                 return true;
             }
-
             // get duration between down and up
             const duration =  new Date().getTime() - this.c.slide.startTime;
 
             // detect click by short duration and missing move
             if (duration < 300 && Math.abs(this.c.slide.distX) < 5 && Math.abs(this.c.slide.distY) < 5) {
+                // console.info(duration, this.c.slide.distX, this.c.slide.distY)
                 this.toggleToolDisplay();
                 this.reset();
                 return true;
@@ -264,7 +282,7 @@
             }
 
             const imageWrappers = this.list.getElementsByClassName(this.c.classImage);
-            imageWrappers[this.c.currentPosition].remove();
+            this.list.removeChild(imageWrappers[this.c.currentPosition]);
 
             const indexShift = this.c.currentPosition === 2 ? -1 : 1;
             this.c.index = this.getImageIndex(indexShift);
@@ -373,17 +391,20 @@
             switch(e.type) {
                 case 'click':
                     return this.clickHandler(e);
+                case 'pointerdown':
                 case 'touchstart':
-                    this.c.isTouch = true;
                     return this.dragstart(e);
+                case 'pointermove':
                 case 'touchmove':
                     return this.drag(e);
+                case 'pointerup':
+                case 'pointerleave':
                 case 'touchend':
                     return this.dragend(e);
                 case 'mousedown':
-                    return this.c.isTouch ? true : this.dragstart(e);
+                    return this.dragstart(e);
                 case 'mousemove':
-                    return this.c.isTouch ? true : this.drag(e);
+                    return this.drag(e);
                 case 'mouseup':
                     return this.dragend(e);
                 case 'dragstart':
@@ -392,6 +413,11 @@
                     return this.updateList(e);
                 case 'resize':
                     return this.resizeHandler(e);
+                case 'load':
+                    this.checkImage(e);
+                case 'dragstart':
+                    e.preventDefault();
+                    return false;
             }
         }
     }

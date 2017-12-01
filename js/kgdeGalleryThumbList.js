@@ -17,7 +17,6 @@
             classGoNext: 'kgdeGalleryGoNext',
 
             /* view classes */
-            classView: 'kgdeGalleryDetailView',
             classImages: 'kgdeGalleryImages',
             classImage: 'kgdeGalleryImage',
             classDescription: 'kgdeGalleryDescription',
@@ -29,7 +28,7 @@
             loadViewImageRun: null,
             isSmallDevice: false,
             callbackFunc: null,
-            isTouch: false
+            loadHeight: 300 // height to detect if image is complete
         },
 
         init(props) {
@@ -44,12 +43,10 @@
                     return;
                 }
 
-                const view = wrapper.getElementsByClassName(this.c.classView)[0] || false;
-
                 wrapper.dataset.galleryIndex = index;
                 thumbList.dataset.listIndex = index;
                 this.addList(wrapper, thumbList, index);
-                this.addView(wrapper, view, index);
+                this.addView(wrapper, index);
                 this.getSizes(index);
                 this.initNavi(index);
 
@@ -86,17 +83,11 @@
             this.prepareLis(lis, index);
         },
 
-        addView(wrapper, view, index) {
-            const images = view ?
-                (view.getElementsByClassName(this.c.classImages)[0] || false) : false;
-            const description = view ?
-                (view.getElementsByClassName(this.c.classDescription)[0] || false) : false;
-
-            this.c.items[index] = Object.assign(this.c.items[index], {
-                view,
-                images,
-                description
-            });
+        addView(wrapper, index) {
+            const images = wrapper.getElementsByClassName(this.c.classImages)[0] || false;
+            const description = wrapper.getElementsByClassName(this.c.classDescription)[0] || false;
+            this.c.items[index]['images'] = images;
+            this.c.items[index]['description'] = description;
         },
 
         getSizes(index) {
@@ -109,15 +100,12 @@
             const itemsVisible = Math.round(thumbListWidth / liWidth);
             const liAvailablePositions = liPositions.slice(0, liPositions.length + 1 - itemsVisible);
 
-            this.c.items[index] = Object.assign(this.c.items[index], {
-                thumbListWidth,
-                ulWidth,
-                liWidth,
-                itemsVisible,
-                liPositions,
-                liAvailablePositions
-            });
-
+            this.c.items[index]['thumbListWidth'] = thumbListWidth;
+            this.c.items[index]['ulWidth'] = ulWidth;
+            this.c.items[index]['liWidth'] = liWidth;
+            this.c.items[index]['itemsVisible'] = itemsVisible;
+            this.c.items[index]['liPositions'] = liPositions;
+            this.c.items[index]['liAvailablePositions'] = liAvailablePositions;
         },
 
         prepareUl(ul, index) {
@@ -127,14 +115,24 @@
         },
 
         setUlEvents(ul) {
-            ul.addEventListener('touchstart', this, false);
-            ul.addEventListener('touchmove', this, false);
-            ul.addEventListener('touchend', this, false);
-            ul.addEventListener('mousedown', this, false);
-            ul.addEventListener('mousemove', this, false);
-            ul.addEventListener('mouseup', this, false);
-            ul.addEventListener('dragstart', this, false);
-            document.addEventListener('mousemove', this, false);
+            switch (KGDE.utils.getDeviceType()) {
+                case 'TOUCH':
+                    ul.addEventListener('touchstart', this, false);
+                    ul.addEventListener('touchmove', this, false);
+                    ul.addEventListener('touchend', this, false);
+                    break;
+                case 'POINTER':
+                    ul.addEventListener('pointerdown', this, false);
+                    ul.addEventListener('pointermove', this, false);
+                    ul.addEventListener('pointerup', this, false);
+                    ul.addEventListener('pointerleave', this, false);
+                default:
+                    ul.addEventListener('mousedown', this, false);
+                    ul.addEventListener('mousemove', this, false);
+                    ul.addEventListener('mouseup', this, false);
+                    ul.addEventListener('dragstart', this, false);
+                    document.addEventListener('mousemove', this, false);
+            }
         },
 
         prepareUlSlideData(index) {
@@ -275,12 +273,6 @@
         },
 
         dragend(e) {
-            // remove double event blocking
-            if (e.type === 'mouseup' && this.c.isTouch) {
-                this.c.isTouch = false;
-                return true;
-            }
-
             // nothing to do
             if(!this.c.currItem) {
                 return true;
@@ -412,9 +404,14 @@
 
         getCurrentOffsetIndex(item) {
             const moveLeft = item.slide.moveLeft;
-            return item.liAvailablePositions.findIndex(position => {
-                return position === Math.abs(moveLeft);
+            let foundIndex = 0;
+            item.liAvailablePositions.forEach((position, index) => {
+                if (position === Math.abs(moveLeft)) {
+                    foundIndex = index;
+                    return;
+                }
             });
+            return foundIndex;
         },
 
         avoidGhostDragging(e) {
@@ -454,8 +451,8 @@
 
         loadViewImage(item, cnt) {
             // check if new image is complete
-            const imageHeight = item.loadImage.height > 500;
-            if (imageHeight || cnt > 20) {
+            const imageHeight = item.loadImage.height > this.c.loadHeight;
+            if (imageHeight || cnt > 40) {
                 clearInterval(this.c.loadViewImageRun);
 
                 if (imageHeight) {
@@ -475,7 +472,7 @@
             const index = item.currentImageIndex;
             const curentImages = item.images.getElementsByClassName(this.c.classImage);
             if (curentImages.length > 1) {
-                curentImages[0].remove();
+                item.images.removeChild(curentImages[0]);
             }
 
             const imageWrapper = document.createElement('div');
@@ -554,17 +551,20 @@
             switch(e.type) {
                 case 'click':
                     return this.liClick(e);
+                case 'pointerdown':
                 case 'touchstart':
-                    this.c.isTouch = true;
                     return this.dragstart(e);
+                case 'pointermove':
                 case 'touchmove':
                     return this.drag(e);
+                case 'pointerup':
+                case 'pointerleave':
                 case 'touchend':
                     return this.dragend(e);
                 case 'mousedown':
-                    return this.c.isTouch ? true : this.dragstart(e);
+                    return this.dragstart(e);
                 case 'mousemove':
-                    return this.c.isTouch ? true : this.drag(e);
+                    return this.drag(e);
                 case 'mouseup':
                     return this.dragend(e);
                 case 'dragstart':
