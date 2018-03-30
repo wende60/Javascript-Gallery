@@ -19,19 +19,28 @@
 
         .kgdeGalleryImage {
             position: absolute;
-            display: flex;
-            justify-content: center;
-
             left: 0;
             top: 0;
             height: 100%;
             width: 100%;
+            text-align: center;
+
+            &:before {
+                content: '';
+                vertical-align: middle;
+                display: inline-block;
+                height: 100%;
+                width: 0;
+                overflow: hidden;
+            }
 
             img {
                 max-height: 100%;
                 max-width: 100%;
                 width: auto;
-                align-self: center;
+                height: auto;
+                object-fit: contain;
+                vertical-align: middle;
             }
 
             &:first-child {
