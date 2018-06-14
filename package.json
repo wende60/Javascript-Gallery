@@ -5,9 +5,9 @@
   "main": "index.html",
   "devDependencies": {
     "babel-cli": "^6.26.0",
-    "babel-core": "^6.26.0",
+    "babel-core": "^6.26.3",
     "babel-preset-es2015": "^6.24.1",
-    "node-sass": "^4.7.2"
+    "node-sass": "^4.9.0"
   },
   "scripts": {
     "cssWatch": "node-sass --style compact --line-numbers --watch ./css/kgdeGallery.scss -o ./css/",
