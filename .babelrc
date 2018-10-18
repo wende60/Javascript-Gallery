@@ -1,3 +1,9 @@
 {
-    "presets": ["es2015", "babili"]
+    'presets': [
+        'env',
+        [
+            'minify',
+            { builtIns: false }
+        ]
+    ]
 }
