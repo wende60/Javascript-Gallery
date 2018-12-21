@@ -290,6 +290,7 @@
 
             const image = document.createElement('img');
             image.src = this.c.sources[addIndex];
+            image.addEventListener('load', this, false);
 
             const newWrapper = document.createElement('div');
             newWrapper.classList.add(this.c.classImage);
