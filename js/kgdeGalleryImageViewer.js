@@ -90,6 +90,7 @@
                     this.list.addEventListener('pointermove', this, false);
                     this.list.addEventListener('pointerup', this, false);
                     this.list.addEventListener('pointerleave', this, false);
+                    this.list.addEventListener('dragstart', this, false);
                     break;
                 default:
                     this.list.addEventListener('mousedown', this, false);
