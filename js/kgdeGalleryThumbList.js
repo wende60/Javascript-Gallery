@@ -126,6 +126,8 @@
                     ul.addEventListener('pointermove', this, false);
                     ul.addEventListener('pointerup', this, false);
                     ul.addEventListener('pointerleave', this, false);
+                    ul.addEventListener('dragstart', this, false);
+                    break;
                 default:
                     ul.addEventListener('mousedown', this, false);
                     ul.addEventListener('mousemove', this, false);
