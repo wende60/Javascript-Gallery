@@ -8,16 +8,18 @@
     "babel-core": "^6.26.3",
     "babel-preset-env": "^1.7.0",
     "babel-preset-minify": "^0.5.0",
-    "node-sass": "^4.12.0"
+    "node-sass": "^4.12.0",
+    "sleep-ms": "^2.0.1"
   },
   "scripts": {
     "cssWatch": "node-sass --style compact --line-numbers --watch ./css/kgdeGallery.scss -o ./css/",
     "cssBuild": "node-sass --style compressed ./css/kgdeGallery.scss ./build/css/kgdeGallery.css",
     "jsBuild": "babel ./js/** -d ./build",
-    "server": "http-server -p 4000",
-    "serverBuild": "http-server ./build -p 4000",
+    "server": "http-server -p 5000",
+    "serverBuild": "http-server ./build -p 5000",
     "copyIndex": "cp ./index.html ./build/index.html",
-    "dev": "npm run server & npm run cssWatch",
+    "dev": "npm run server & npm run cssWatch & npm run openBrowser",
+    "openBrowser": "sleepms 2000 && open \"http://localhost:5000\"",
     "build": "npm run cssBuild && npm run jsBuild && npm run copyIndex && npm run serverBuild",
     "kill": "killall node"
   },
