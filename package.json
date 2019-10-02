@@ -18,7 +18,7 @@
     "server": "http-server -p 5000",
     "serverBuild": "http-server ./build -p 5000",
     "copyIndex": "cp ./index.html ./build/index.html",
-    "dev": "npm run server & npm run cssWatch & npm run openBrowser",
+    "dev": "npm run openBrowser & npm run cssWatch & npm run server",
     "openBrowser": "sleepms 2000 && open \"http://localhost:5000\"",
     "build": "npm run cssBuild && npm run jsBuild && npm run copyIndex && npm run serverBuild",
     "kill": "killall node"
