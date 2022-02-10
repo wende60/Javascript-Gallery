@@ -8,7 +8,7 @@
     "babel-core": "^6.26.3",
     "babel-preset-env": "^1.7.0",
     "babel-preset-minify": "^0.5.0",
-    "node-sass": "^4.12.0"
+    "node-sass": "^7.0.0"
   },
   "scripts": {
     "cssWatch": "node-sass --style compact --line-numbers --watch ./css/kgdeGallery.scss -o ./css/",
