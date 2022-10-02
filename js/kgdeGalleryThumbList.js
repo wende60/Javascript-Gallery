@@ -1,6 +1,7 @@
 
     var KGDE = window.KGDE || {};
 
+    // Attention! To use links in the descriptions replace the a-tag with the term 'linkplaceholder'
     KGDE.thumbListGallery = {
         c: {
             items: [],
@@ -176,7 +177,7 @@
             const thumbImage = thumb.dataset.srcThumb || '';
             const viewImage = thumb.dataset.srcView || '';
             const fullImage = thumb.dataset.srcFull || '';
-            const imageInfo = thumb.innerHTML.replace(/(\<\/?)link/g, '$1a');
+            const imageInfo = thumb.innerHTML;
 
             item.views.push(viewImage);
             item.fulls.push(fullImage);
@@ -485,7 +486,10 @@
 
             imageWrapper.appendChild(image);
             item.images.appendChild(imageWrapper);
-            item.description.innerHTML = item.infos[index];
+            console.info(item.infos[index]);
+
+            // Ti avoid nested linkswe wrap those in a placeholder until we display the description
+            item.description.innerHTML = item.infos[index].replace(/linkplaceholder/g, 'a');
             this.setSelectedThumb(item);
 
             if (this.c.callbackFunc) {
@@ -578,6 +582,3 @@
             return false;
         }
     };
-
-
-
