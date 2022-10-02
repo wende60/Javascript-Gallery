@@ -486,7 +486,6 @@
 
             imageWrapper.appendChild(image);
             item.images.appendChild(imageWrapper);
-            console.info(item.infos[index]);
 
             // Ti avoid nested linkswe wrap those in a placeholder until we display the description
             item.description.innerHTML = item.infos[index].replace(/linkplaceholder/g, 'a');
